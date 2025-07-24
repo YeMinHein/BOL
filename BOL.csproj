@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FF00BA84-1F7D-44F2-813A-07DC122C2421}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BOL</RootNamespace>
+    <AssemblyName>BOL</AssemblyName>
+    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <LangVersion>Latest</LangVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\..\..\Spectrum_RequireDll_2\DLLs\BOL\bin\Debug\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="API\bol_API_Account.cs" />
+    <Compile Include="API\bol_API_AdvancePaymentPlanAction.cs" />
+    <Compile Include="API\bol_API_AppIntegration.cs" />
+    <Compile Include="API\bol_API_AppVersionTracker.cs" />
+    <Compile Include="API\bol_API_AYA.cs" />
+    <Compile Include="API\bol_API_BSS.cs" />
+    <Compile Include="API\bol_API_BSS_CustomerInfo.cs" />
+    <Compile Include="API\bol_API_BSS_PayHistory.cs" />
+    <Compile Include="API\bol_API_CB.cs" />
+    <Compile Include="API\bol_API_CF_CollectForm.cs" />
+    <Compile Include="API\bol_API_Customer.cs" />
+    <Compile Include="API\bol_API_Evo.cs" />
+    <Compile Include="API\bol_API_Evo_EOD.cs" />
+    <Compile Include="API\bol_API_Evo_Subscriber.cs" />
+    <Compile Include="API\bol_API_Firebase.cs" />
+    <Compile Include="API\bol_API_GetActivityLog.cs" />
+    <Compile Include="API\bol_API_GetCustomerInfo.cs" />
+    <Compile Include="API\bol_API_GetPlan.cs" />
+    <Compile Include="API\bol_API_ImageList.cs" />
+    <Compile Include="API\bol_API_KBZ_CallbackRequest.cs" />
+    <Compile Include="API\bol_API_KBZ_OrderInfo.cs" />
+    <Compile Include="API\bol_API_KBZ_Precreate.cs" />
+    <Compile Include="API\bol_API_KBZ_PWA.cs" />
+    <Compile Include="API\bol_API_KBZ_QueryOrder.cs" />
+    <Compile Include="API\bol_API_KBZ_Refund.cs" />
+    <Compile Include="API\bol_API_KBZ_Transaction.cs" />
+    <Compile Include="API\bol_API_Log.cs" />
+    <Compile Include="API\bol_API_LTE.cs" />
+    <Compile Include="API\bol_API_MCB.cs" />
+    <Compile Include="API\bol_API_Merchant.cs" />
+    <Compile Include="API\bol_API_MobileApp.cs" />
+    <Compile Include="API\bol_API_NotiList.cs" />
+    <Compile Include="API\bol_API_RegionList.cs" />
+    <Compile Include="API\bol_API_RegisterDevice.cs" />
+    <Compile Include="API\bol_API_SaveActivityLog.cs" />
+    <Compile Include="API\bol_API_SendEmail.cs" />
+    <Compile Include="API\bol_API_Token.cs" />
+    <Compile Include="API\bol_API_TopicReq.cs" />
+    <Compile Include="API\bol_API_TopicRes.cs" />
+    <Compile Include="API\bol_API_UserAuthentication.cs" />
+    <Compile Include="API\bol_API_WM.cs" />
+    <Compile Include="API\bol_API_WM_QueryOrder.cs" />
+    <Compile Include="API\bol_API_WM_Transaction.cs" />
+    <Compile Include="API\bol_API_XWF.cs" />
+    <Compile Include="BaseEntity.cs" />
+    <Compile Include="bol_Enum.cs" />
+    <Compile Include="CF\bol_CF_CollectForm_List.cs" />
+    <Compile Include="CF\bol_CF_CollectForm_Staff.cs" />
+    <Compile Include="CNP\bol_CNP_CustomerData.cs" />
+    <Compile Include="CNP\bol_CNP_ResetPassword.cs" />
+    <Compile Include="CNP\bol_CNP_Subscription.cs" />
+    <Compile Include="DB\bol_DB_Dashboard1.cs" />
+    <Compile Include="DB\bol_DB_SAFormReport.cs" />
+    <Compile Include="DD\bol_DD_ImageSetup.cs" />
+    <Compile Include="DD\bol_DD_RegionDetail.cs" />
+    <Compile Include="DD\bol_DD_RegionSetup.cs" />
+    <Compile Include="DPSI\bol_DPSI_CompanyForm.cs" />
+    <Compile Include="DPSI\bol_DPSI_ContactForm.cs" />
+    <Compile Include="DPSI\bol_DPSI_Dashboard1.cs" />
+    <Compile Include="DPSI\bol_DPSI_SAForm.cs" />
+    <Compile Include="DPSI\bol_DPSI_SAFormReport.cs" />
+    <Compile Include="EMN\bol_EMN_History.cs" />
+    <Compile Include="EMN\bol_EMN_Send.cs" />
+    <Compile Include="EMN\bol_EMN_Template.cs" />
+    <Compile Include="EvoNoti\bol_Evo_NOTI_Template.cs" />
+    <Compile Include="General\bol_ActionType.cs" />
+    <Compile Include="General\bol_BankPayment.cs" />
+    <Compile Include="General\bol_BillingArea.cs" />
+    <Compile Include="General\bol_BSStatus.cs" />
+    <Compile Include="General\bol_BuildingType.cs" />
+    <Compile Include="General\bol_BusinessType.cs" />
+    <Compile Include="General\bol_Channel.cs" />
+    <Compile Include="General\bol_City.cs" />
+    <Compile Include="General\bol_Department.cs" />
+    <Compile Include="General\bol_DPSI_CompanyName.cs" />
+    <Compile Include="General\bol_DPSI_ContactName.cs" />
+    <Compile Include="General\bol_DPSI_ServiceName.cs" />
+    <Compile Include="General\bol_DPSI_ServicePlan.cs" />
+    <Compile Include="General\bol_EMNParam.cs" />
+    <Compile Include="General\bol_EMNSubType.cs" />
+    <Compile Include="General\bol_EMNTemplate.cs" />
+    <Compile Include="General\bol_EMNType.cs" />
+    <Compile Include="General\bol_ExportExcelLog.cs" />
+    <Compile Include="General\bol_FTTHStatusName.cs" />
+    <Compile Include="General\bol_GroupLeader.cs" />
+    <Compile Include="General\bol_Location.cs" />
+    <Compile Include="General\bol_LTE.cs" />
+    <Compile Include="General\bol_MovieType.cs" />
+    <Compile Include="General\bol_Position.cs" />
+    <Compile Include="General\bol_PromoPlan.cs" />
+    <Compile Include="General\bol_Role.cs" />
+    <Compile Include="General\bol_ServicePlan.cs" />
+    <Compile Include="General\bol_ServiceType.cs" />
+    <Compile Include="General\bol_SMSParam.cs" />
+    <Compile Include="General\bol_SMSSubType.cs" />
+    <Compile Include="General\bol_SMSTemplate.cs" />
+    <Compile Include="General\bol_SMSType.cs" />
+    <Compile Include="General\bol_SubType.cs" />
+    <Compile Include="General\bol_Team.cs" />
+    <Compile Include="General\bol_TeamLeader.cs" />
+    <Compile Include="General\bol_Template.cs" />
+    <Compile Include="General\bol_Topic.cs" />
+    <Compile Include="General\bol_TopicType.cs" />
+    <Compile Include="General\bol_Township.cs" />
+    <Compile Include="General\bol_Type.cs" />
+    <Compile Include="GM\bol_GM_SysParams.cs" />
+    <Compile Include="GM\bol_ServiceBasePlan.cs" />
+    <Compile Include="GT\bol_GT_Team.cs" />
+    <Compile Include="HB\bol_HB_Setup.cs" />
+    <Compile Include="LLK\bol_API_LaLaKyiList.cs" />
+    <Compile Include="LLK\bol_LLKSetup.cs" />
+    <Compile Include="LSM\bol_LSM.cs" />
+    <Compile Include="MobileView\bol_MobileView.cs" />
+    <Compile Include="NOTI\bol_NOTI_EventBillGeneration.cs" />
+    <Compile Include="NOTI\bol_NOTI_Param.cs" />
+    <Compile Include="NOTI\bol_NOTI_Send.cs" />
+    <Compile Include="NOTI\bol_NOTI_SendDevice.cs" />
+    <Compile Include="NOTI\bol_NOTI_Template.cs" />
+    <Compile Include="PAY\bol_PaymentSetting.cs" />
+    <Compile Include="PAY\bol_PAY_History.cs" />
+    <Compile Include="PAY\bol_PAY_PaymentType.cs" />
+    <Compile Include="PAY\bol_PAY_Refund.cs" />
+    <Compile Include="POS\bol_POS_Data.cs" />
+    <Compile Include="PROMO\bol_PROMO_CITY.cs" />
+    <Compile Include="PROMO\bol_PROMO_Offer_Setup.cs" />
+    <Compile Include="PROMO\bol_PROMO_Setup.cs" />
+    <Compile Include="PROMO\bol_ServiceBasePlan_Setup.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Referrals\bol_Referrals.cs" />
+    <Compile Include="Resources\bol_Resources_Blog.cs" />
+    <Compile Include="Resources\bol_Resources_EventPromo.cs" />
+    <Compile Include="Resources\bol_Resources_FAQ.cs" />
+    <Compile Include="Resources\bol_Resources_HowTo.cs" />
+    <Compile Include="Resources\bol_Resources_SuccessStories.cs" />
+    <Compile Include="ResultMsg.cs" />
+    <Compile Include="SMS\bol_SMS_History.cs" />
+    <Compile Include="SMS\bol_SMS_Send.cs" />
+    <Compile Include="SMS\bol_SMS_Template.cs" />
+    <Compile Include="StaffDetails\bol_StaffDetails.cs" />
+    <Compile Include="SVM\bol_SVM_ChangeAddressForm.cs" />
+    <Compile Include="SVM\bol_SVM_DisableStatusForm.cs" />
+    <Compile Include="SVM\bol_SVM_PlanChangeForm.cs" />
+    <Compile Include="SVM\bol_SVM_ReactivateForm.cs" />
+    <Compile Include="URM\bol_URM_Role_Menu.cs" />
+    <Compile Include="URM\bol_URM_Role_Setup.cs" />
+    <Compile Include="URM\bol_URM_Setup.cs" />
+    <Compile Include="WDM\bol_WDM_AdvancePayment.cs" />
+    <Compile Include="WDM\bol_WDM_BS_SAForm.cs" />
+    <Compile Include="WDM\bol_WDM_Complaint.cs" />
+    <Compile Include="WDM\bol_WDM_ComplaintSetup.cs" />
+    <Compile Include="WDM\bol_WDM_GuestContactUs.cs" />
+    <Compile Include="WDM\bol_WDM_Interest.cs" />
+    <Compile Include="WDM\bol_WDM_LeadEntryForm.cs" />
+    <Compile Include="WDM\bol_WDM_LimitCashCollector.cs" />
+    <Compile Include="WDM\bol_WDM_ODSMap.cs" />
+    <Compile Include="WDM\bol_WDM_RegionDetail.cs" />
+    <Compile Include="WDM\bol_WDM_RegionSetup.cs" />
+    <Compile Include="WDM\bol_WDM_SAForm.cs" />
+    <Compile Include="WebNoti\bol_WebNOTI_EventBillGeneration.cs" />
+    <Compile Include="WebNoti\bol_WebNOTI_Param.cs" />
+    <Compile Include="WebNoti\bol_WebNOTI_Send.cs" />
+    <Compile Include="WebNoti\bol_WebNOTI_SendDevice.cs" />
+    <Compile Include="WebNoti\bol_WebNOTI_Template.cs" />
+    <Compile Include="WebNoti\bol_WebNOTI_User_Devices.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

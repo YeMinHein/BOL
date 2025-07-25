@@ -27,4 +27,4 @@ jobs:
         run: msbuild.exe BOL.sln /p:Platform="Any CPU" /p:Configuration="Release"
         
       - name: Run Tests
-        run: vstest.console.exe .\tests\BOL.Tests\bin\Release\BOL.Tests.dll
+        run: vstest.console.exe tests/BOL.Tests/bin/Release/BOL.Tests.dll

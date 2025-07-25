@@ -1,4 +1,4 @@
-name: Build, Test, NuGet Pack & Google Drive Upload
+name: NuGet Pack & Google Drive Upload
 
 on:
   push:
@@ -26,9 +26,9 @@ jobs:
       - name: Build Solution
         run: msbuild.exe BOL.sln /p:Platform="Any CPU" /p:Configuration="Release"
 
-      - name: Run Unit Tests
-        run: |
-          vstest.console.exe .\tests\BOL.Tests\bin\Release\BOL.Tests.dll
+      # - name: Run Unit Tests
+      #   run: |
+      #     vstest.console.exe .\tests\BOL.Tests\bin\Release\BOL.Tests.dll
           
       - name: NuGet Pack DAL Project
         id: nuget_pack

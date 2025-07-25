@@ -23,17 +23,17 @@ jobs:
     - name: Restore NuGet Packages
       run: nuget restore
 
-    - name: Get Current Version from Git Tags
-      id: versioning
-      run: |
-        $latestTag = git describe --tags --abbrev=0
-        if (-not $latestTag) { $latestTag = "1.0.0" }
-        Write-Output "Latest tag: $latestTag"
-        $versionParts = $latestTag -split '\.'
-        $patch = [int]$versionParts[2] + 1
-        $newVersion = "$($versionParts[0]).$($versionParts[1]).$patch"
-        echo "##[set-output name=version;]$newVersion"
-      shell: pwsh
+    # - name: Get Current Version from Git Tags
+    #   id: versioning
+    #   run: |
+    #     $latestTag = git describe --tags --abbrev=0
+    #     if (-not $latestTag) { $latestTag = "1.0.0" }
+    #     Write-Output "Latest tag: $latestTag"
+    #     $versionParts = $latestTag -split '\.'
+    #     $patch = [int]$versionParts[2] + 1
+    #     $newVersion = "$($versionParts[0]).$($versionParts[1]).$patch"
+    #     echo "##[set-output name=version;]$newVersion"
+    #   shell: pwsh
 
     - name: Build Solution (.NET 4.8.1)
       run: msbuild BOL.sln /p:Configuration=Release

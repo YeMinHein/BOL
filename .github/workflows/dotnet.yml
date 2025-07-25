@@ -2,6 +2,8 @@ name: NuGet Pack & Upload to Google Drive
 
 on:
   push:
+    tags:
+    - 'v*'
     branches:
       - master
   workflow_dispatch:
@@ -15,35 +17,23 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1.3.1
+      uses: microsoft/setup-msbuild@v1
 
     - name: Setup NuGet
-      uses: NuGet/setup-nuget@v2
+      uses: NuGet/setup-nuget@v1.0.2
+    
+    - name: Navigate to Workspace
+      run: cd $GITHUB_WORKSPACE
 
-    - name: Restore NuGet Packages
-      run: nuget restore
+    - name: Create Build Directory
+      run: mkdir _build
 
-    # - name: Get Current Version from Git Tags
-    #   id: versioning
-    #   run: |
-    #     $latestTag = git describe --tags --abbrev=0
-    #     if (-not $latestTag) { $latestTag = "1.0.0" }
-    #     Write-Output "Latest tag: $latestTag"
-    #     $versionParts = $latestTag -split '\.'
-    #     $patch = [int]$versionParts[2] + 1
-    #     $newVersion = "$($versionParts[0]).$($versionParts[1]).$patch"
-    #     echo "##[set-output name=version;]$newVersion"
-    #   shell: pwsh
+    - name: Restore Packages
+      run: nuget restore BOL.sln
 
-    - name: Build Solution (.NET 4.8.1)
-      run: msbuild BOL.sln /p:Configuration=Release
+    - name: Build Solution
+      run: |
+         msbuild.exe EzRep.sln /p:platform="Any CPU" /p:configuration="Release"
 
-    - name: Pack NuGet Package
-      run: nuget pack BOL.csproj -Version ${{ steps.versioning.outputs.version }} -OutputDirectory ./nupkgs
 
-    - name: Upload NuGet Package Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: NuGetPackage
-        path: ./nupkgs/*.nupkg
 

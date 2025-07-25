@@ -30,7 +30,7 @@ jobs:
       #   run: |
       #     vstest.console.exe .\tests\BOL.Tests\bin\Release\BOL.Tests.dll
           
-      - name: NuGet Pack DAL Project
+      - name: NuGet Pack BOL Project
         id: nuget_pack
         run: |
           nuget pack BOL.csproj -OutputDirectory ./nupkgs

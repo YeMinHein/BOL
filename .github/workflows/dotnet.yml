@@ -7,88 +7,43 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-pack-tag:
+  build-pack:
     runs-on: windows-latest
 
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0  # Important to fetch tags too
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.3.1
 
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v2
 
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
-
-    - name: Calculate Version (Auto Increment)
-      id: versioning
-      shell: pwsh
-      run: |
-        git fetch --tags
-
-        $lastTag = $(git describe --tags --abbrev=0) 2>$null
-        if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrEmpty($lastTag)) {
-            Write-Output "No tags found. Defaulting to v1.0.0"
-            $lastTag = "v1.0.0"
-        } else {
-            Write-Output "Last Tag: $lastTag"
-        }
-
-        $versionParts = $lastTag.TrimStart('v').Split('.')
-        $major = [int]$versionParts[0]
-        $minor = [int]$versionParts[1]
-        $patch = [int]$versionParts[2] + 1
-
-        $newVersion = "$major.$minor.$patch"
-        Write-Output "New Version: $newVersion"
-
-        echo "nuget_version=$newVersion" >> $env:GITHUB_ENV
-
-    - name: Show NuGet Version
-      run: echo "NuGet Version is ${{ env.nuget_version }}"
-
     - name: Restore NuGet Packages
-      run: nuget restore YourProject.sln
+      run: nuget restore
 
-    - name: Build Solution
-      run: msbuild YourProject.sln /p:Configuration=Release /p:Platform="Any CPU"
+    - name: Get Current Version from Git Tags
+      id: versioning
+      run: |
+        $latestTag = git describe --tags --abbrev=0
+        if (-not $latestTag) { $latestTag = "1.0.0" }
+        Write-Output "Latest tag: $latestTag"
+        $versionParts = $latestTag -split '\.'
+        $patch = [int]$versionParts[2] + 1
+        $newVersion = "$($versionParts[0]).$($versionParts[1]).$patch"
+        echo "##[set-output name=version;]$newVersion"
+      shell: pwsh
+
+    - name: Build Solution (.NET 4.8.1)
+      run: msbuild BOL.sln /p:Configuration=Release
 
     - name: Pack NuGet Package
-      run: |
-        nuget pack YourProject.csproj `
-          -OutputDirectory ./nupkgs `
-          -Properties Configuration=Release `
-          -Version $env:nuget_version
+      run: nuget pack BOL.csproj -Version ${{ steps.versioning.outputs.version }} -OutputDirectory ./nupkgs
 
     - name: Upload NuGet Package Artifact
       uses: actions/upload-artifact@v4
       with:
         name: NuGetPackage
         path: ./nupkgs/*.nupkg
-
-    - name: Create & Push Git Tag
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      shell: pwsh
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-
-        git fetch --tags
-        $newTag = "v$env:nuget_version"
-
-        if (git tag -l $newTag) {
-            Write-Output "Tag $newTag already exists. Skipping tag creation."
-        } else {
-            Write-Output "Creating and pushing tag $newTag"
-            git tag $newTag
-            git push origin $newTag
-        }
-
-    # Optional: Push to NuGet.org
-    # - name: Push to NuGet.org
-    #   run: |
-    #     nuget push ./nupkgs/*.nupkg -ApiKey ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json
 

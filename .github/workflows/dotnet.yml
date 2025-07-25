@@ -21,10 +21,10 @@ jobs:
       uses: NuGet/setup-nuget@v2
 
     - name: Restore NuGet Packages
-      run: nuget restore
+      run: msbuild BOL.sln /t:Restore
 
     - name: Build Solution (.NET 4.8.1)
-      run: msbuild BOL.sln /p:Configuration=Release
+      run: msbuild BOL.sln /p:Configuration=Release /p:TargetFrameworkVersion=v4.8.1 /t:Rebuild
 
     - name: Pack NuGet Package (Local Output)
       run: |

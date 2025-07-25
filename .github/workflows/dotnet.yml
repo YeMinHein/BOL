@@ -1,22 +1,22 @@
-name: Build and Tests
+name: Build, Test, NuGet Pack & Google Drive Upload
 
-on:  
+on:
   push:
     branches: [ master ]
- 
-jobs:  
-  build:    
+
+jobs:
+  build-test-pack:
     runs-on: windows-latest
-    
-    steps:      
+
+    steps:
       - uses: actions/checkout@v2
-      
+
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
 
       - name: Setup NuGet
         uses: NuGet/setup-nuget@v1.0.5
-        
+
       - name: Setup VSTest
         uses: darenm/Setup-VSTest@v1
 
@@ -25,6 +25,32 @@ jobs:
 
       - name: Build Solution
         run: msbuild.exe BOL.sln /p:Platform="Any CPU" /p:Configuration="Release"
-        
-      - name: Run Tests
-        run: vstest.console.exe tests/BOL.Tests/bin/Release/BOL.Tests.dll
+
+      - name: Run Unit Tests
+        run: |
+          vstest.console.exe .\tests\BOL.Tests\bin\Release\BOL.Tests.dll
+          
+      - name: NuGet Pack DAL Project
+        id: nuget_pack
+        run: |
+          nuget pack DAL.csproj -OutputDirectory ./nupkgs
+          
+      - name: Notify Google Chat - Pack Success
+        if: steps.nuget_pack.outcome == 'success'
+        run: |
+          $body = @{ text = "✅ NuGet Pack Success: DAL.nupkg created." } | ConvertTo-Json -Depth 10
+          Invoke-RestMethod -Uri "${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}" -Method Post -ContentType 'application/json' -Body $body
+
+      - name: Notify Google Chat - Pack Failure
+        if: steps.nuget_pack.outcome == 'failure'
+        run: |
+          $body = @{ text = "❌ DAL.nupkg Creation Failed!" } | ConvertTo-Json -Depth 10
+          Invoke-RestMethod -Uri "${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}" -Method Post -ContentType 'application/json' -Body $body
+
+      - name: Upload to Google Drive
+        if: steps.nuget_pack.outcome == 'success'
+        uses: google-github-actions/upload-cloud-storage@v1
+        with:
+          credentials_json: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_JSON }}
+          path: ./nupkgs/*.nupkg
+          destination: drive://1jN23YIU6aclDiZhFZliCLxzdW76-39fo/

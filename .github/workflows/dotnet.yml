@@ -7,12 +7,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-pack-push:
+  build-pack-tag:
     runs-on: windows-latest
 
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Important to fetch tags too
 
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v2
@@ -20,40 +22,42 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
 
-    # - name: Calculate Version (Auto Increment)
-    #   id: versioning
-    #   shell: pwsh
-    #   run: |
-    #     $lastTag = git describe --tags --abbrev=0 2>$null
+    - name: Calculate Version (Auto Increment)
+      id: versioning
+      shell: pwsh
+      run: |
+        git fetch --tags
 
-    #     if ([string]::IsNullOrEmpty($lastTag)) {
-    #         Write-Output "No tags found. Defaulting to v1.0.0"
-    #         $lastTag = "v1.0.0"
-    #      }  else {
-    #         Write-Output "Last Tag: $lastTag"
-    #      }
+        $lastTag = $(git describe --tags --abbrev=0) 2>$null
+        if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrEmpty($lastTag)) {
+            Write-Output "No tags found. Defaulting to v1.0.0"
+            $lastTag = "v1.0.0"
+        } else {
+            Write-Output "Last Tag: $lastTag"
+        }
 
-    #     $versionParts = $lastTag.TrimStart('v').Split('.')
-    #     $major = [int]$versionParts[0]
-    #     $minor = [int]$versionParts[1]
-    #     $patch = [int]$versionParts[2] + 1
+        $versionParts = $lastTag.TrimStart('v').Split('.')
+        $major = [int]$versionParts[0]
+        $minor = [int]$versionParts[1]
+        $patch = [int]$versionParts[2] + 1
 
-    #     $newVersion = "$major.$minor.$patch"
-    #     Write-Output "New Version: $newVersion"
-    #     echo "nuget_version=$newVersion" >> $env:GITHUB_ENV
-    
-    # - name: Show NuGet Version
-      # run: echo "NuGet Version is ${{ env.nuget_version }}"
+        $newVersion = "$major.$minor.$patch"
+        Write-Output "New Version: $newVersion"
+
+        echo "nuget_version=$newVersion" >> $env:GITHUB_ENV
+
+    - name: Show NuGet Version
+      run: echo "NuGet Version is ${{ env.nuget_version }}"
 
     - name: Restore NuGet Packages
-      run: nuget restore BOL.sln
+      run: nuget restore YourProject.sln
 
     - name: Build Solution
-      run: msbuild BOL.sln /p:Configuration=Release /p:Platform="Any CPU"
+      run: msbuild YourProject.sln /p:Configuration=Release /p:Platform="Any CPU"
 
     - name: Pack NuGet Package
       run: |
-        nuget pack BOL.csproj `
+        nuget pack YourProject.csproj `
           -OutputDirectory ./nupkgs `
           -Properties Configuration=Release `
           -Version $env:nuget_version
@@ -69,8 +73,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       shell: pwsh
       run: |
-        git config user.name "YeMinHein"
-        git config user.email "yeminhein.tgo@gmail.com"
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
 
         git fetch --tags
         $newTag = "v$env:nuget_version"
@@ -82,3 +86,9 @@ jobs:
             git tag $newTag
             git push origin $newTag
         }
+
+    # Optional: Push to NuGet.org
+    # - name: Push to NuGet.org
+    #   run: |
+    #     nuget push ./nupkgs/*.nupkg -ApiKey ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json
+

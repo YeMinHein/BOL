@@ -1,4 +1,4 @@
-name: NuGet Pack & Upload to Google Drive
+name: Local NuGet Pack (.NET 4.8.1)
 
 on:
   push:
@@ -11,27 +11,28 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout Code
+    - name: Checkout Repository
       uses: actions/checkout@v4
 
     - name: Setup MSBuild
-      uses: microsoft/setup-msbuild
+      uses: microsoft/setup-msbuild@v1.3.1
 
     - name: Setup NuGet
-      uses: NuGet/setup-nuget
-    
-    - name: Navigate to Workspace
-      run: cd $GITHUB_WORKSPACE
+      uses: NuGet/setup-nuget@v2
 
-    - name: Create Build Directory
-      run: mkdir _build
+    - name: Restore NuGet Packages
+      run: nuget restore
 
-    - name: Restore Packages
-      run: nuget restore BOL.sln
+    - name: Build Solution (.NET 4.8.1)
+      run: msbuild YourSolution.sln /p:Configuration=Release
 
-    - name: Build Solution
+    - name: Pack NuGet Package (Local Output)
       run: |
-         msbuild.exe EzRep.sln /p:platform="Any CPU" /p:configuration="Release"
+        nuget pack YourProject.csproj -OutputDirectory ./nupkgs
+        echo "NuGet package(s) generated in ./nupkgs"
 
-
-
+    - name: Upload NuGet Package as Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: LocalNuGetPackage
+        path: ./nupkgs/*.nupkg

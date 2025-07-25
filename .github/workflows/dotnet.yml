@@ -24,11 +24,11 @@ jobs:
       run: nuget restore
 
     - name: Build Solution (.NET 4.8.1)
-      run: msbuild YourSolution.sln /p:Configuration=Release
+      run: msbuild BOL.sln /p:Configuration=Release
 
     - name: Pack NuGet Package (Local Output)
       run: |
-        nuget pack YourProject.csproj -OutputDirectory ./nupkgs
+        nuget pack BOL.csproj -OutputDirectory ./nupkgs
         echo "NuGet package(s) generated in ./nupkgs"
 
     - name: Upload NuGet Package as Artifact
